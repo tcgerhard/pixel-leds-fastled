@@ -1,0 +1,5 @@
+# define MQTT_SERVER "0.0.0.0"   
+# define MQTT_TOPIC  "/ledlights/garage"
+
+# define CFG_SSID "wifiSSID"
+# define CFG_PSK "wifiPWD"
