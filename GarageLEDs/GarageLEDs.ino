@@ -17,8 +17,8 @@ WiFiClient espClient;
 PubSubClient mqtt87(espClient);
 
 #ifdef INCLUDE_TEMP_SENSOR
-#define ONE_WIRE_BUS D4
-//#define ONE_WIRE_BUS 4
+//#define ONE_WIRE_BUS D4
+#define ONE_WIRE_BUS 4
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress testThermometer;
@@ -397,13 +397,16 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
       updateEeprom();
     }
   } else if (strcmp(tmp, "system:on") == 0) {
-    systemOff = false;
-    for  (int currentBrightness = 0; currentBrightness < eeprom_data.brightness; currentBrightness++) {
-      FastLED.setBrightness(currentBrightness);
-      FastLED.show();
-      delay(12);
-      updateEeprom();
+
+    if  (systemOff) {       // Bring lights up gradually
+      for  (int currentBrightness = 0; currentBrightness < eeprom_data.brightness; currentBrightness++) {
+        FastLED.setBrightness(currentBrightness);
+        FastLED.show();
+        delay(12);
+        updateEeprom();
+      }
     }
+  systemOff = false;
   } else if (strcmp(tmp, "twinkle:on") == 0) {
     twinkling = true;
     
